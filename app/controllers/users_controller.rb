@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
     def show # 追加
         @user = User.find(params[:id])
+        @microposts = @user.microposts.order(created_at: :desc)
     end
 
 
@@ -10,14 +11,16 @@ class UsersController < ApplicationController
     
     def create
         @user = User.new(user_params)
+        
         if @user.save
+            flash[:success] = "Welcome to the Sample App!"
             redirect_to @user
         else
             render 'new'
         end
     end
-
-private
+    
+   private
 #userキーが存在するか検証、するならparams[:user]のうち以上のカラムの値を受け取る
     def user_params
         params.require(:user).permit(:name, :email, :password,
@@ -25,3 +28,5 @@ private
      
     end
 end
+
+
