@@ -1,5 +1,7 @@
+<%# remote: trueはjavascriptの為%>
+<%# methoをdeleteにしてリクエスト%>
 <%= form_for(current_user.following_relationships.find_by(followed_id: @user.id),
              html: { method: :delete },
              remote: true) do |f| %>
-  <%= f.submit "Unfollow", class: "btn" %>
+    <%= f.submit "Unfollow", class: "btn" %>
 <% end %>

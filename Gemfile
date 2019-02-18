@@ -31,6 +31,13 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem 'hirb'   
+gem 'hirb-unicode'
+
+gem 'carrierwave',             '0.10.0'
+gem 'mini_magick',             '3.8.0'
+gem 'fog',                     '1.36.0'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

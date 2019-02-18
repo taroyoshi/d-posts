@@ -7,33 +7,28 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
   
-  has_many :microposts
+  has_many :microposts #models/micropost.rbのbelongs_to :userに対応
   
-  has_many :following_relationships, class_name:  "Relationship",
-                                    foreign_key: "follower_id",
-                                    dependent:   :destroy
-  has_many :following_users, through: :following_relationships, source: :followed
+  has_many :following_relationships, class_name:  "Relationship",   #following_relationships という
+                                    foreign_key: "follower_id",     #Relationshipクラスと同じ形で外部キーfollower_id
+                                    dependent:   :destroy           #(Relationshipの)従属先のfollowerが削除されたらdestroy
+  has_many :following_users, through: :following_relationships, source: :followed 
+                                                                    #following_relationshipsを経由してfollowedを見るfollowing_usersの定義
   
-  has_many :follower_relationships, class_name:  "Relationship",
-                                    foreign_key: "followed_id",
-                                    dependent:   :destroy
+  has_many :follower_relationships, class_name:  "Relationship",    #follower_relationships という
+                                    foreign_key: "followed_id",     #Relationshipクラスと同じ形で外部キーfollowed_id
+                                    dependent:   :destroy           #(Relationshipの)従属先のfollowedが削除されたらdestroy
   has_many :follower_users, through: :follower_relationships, source: :follower
+                                                                    #follower_relationshipsを経由してfollowerを見るfollower_usersの定義
+
   
-  
-  
-  
-  
- 
-  # 他のユーザーをフォローする
+  #他のユーザーをフォローする
   def follow(other_user)
-      
     following_relationships.find_or_create_by(followed_id: other_user.id)
-    
-    end
+  end
 
   # フォローしているユーザーをアンフォローする
   def unfollow(other_user)
-      
     following_relationship = following_relationships.find_by(followed_id: other_user.id)
     following_relationship.destroy if following_relationship
   end
@@ -41,5 +36,11 @@ class User < ActiveRecord::Base
   # あるユーザーをフォローしているかどうか？
   def following?(other_user)
     following_users.include?(other_user)
+  end
+  
+  #自身の投稿とフォローしてるアカウントの投稿を取得
+  #following_user_idsはhas_many :following_usersからの自動生成メソッド
+  def feed_items 
+    Micropost.where(user_id: following_user_ids + [self.id])
   end
 end

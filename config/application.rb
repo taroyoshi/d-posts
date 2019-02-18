@@ -17,6 +17,7 @@ module DPosts
       g.test_framework false
     end
     
+    #Ajaxリクエストで安全に行う為のトークン付与
     config.action_view.embed_authenticity_token_in_remote_forms = true
   end
 end

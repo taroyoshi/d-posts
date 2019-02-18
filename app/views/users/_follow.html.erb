@@ -1,4 +1,8 @@
+<%# remote: trueはjavascriptの為%>
+<%# hidden_field_tagはinputタグのtype=hiddenと同じ%>
 <%= form_for(current_user.following_relationships.build, remote: true) do |f| %>
-  <div><%= hidden_field_tag :followed_id, @user.id %></div>
-  <%= f.submit "Follow", class: "btn btn-primary" %>
+    <div>
+        <%= hidden_field_tag :followed_id, @user.id %>
+    </div>
+    <%= f.submit "Follow", class: "btn btn-primary" %>
 <% end %>
