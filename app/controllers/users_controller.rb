@@ -1,5 +1,12 @@
 class UsersController < ApplicationController
-    def show # 追加
+    
+    before_action :logged_in_user, only: [:index]
+
+    def index
+        @users = User.paginate(page: params[:page],:per_page => 10)
+    end
+    
+    def show
         @user = User.find(params[:id])
         @microposts = @user.microposts.order(created_at: :desc)
     end
